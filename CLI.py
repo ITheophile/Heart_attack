@@ -3,24 +3,6 @@ import pandas as pd
 import time
 import argparse
 
-""" 
-HOW TO USE:
-1. Open your terminal and set the working directory where the
-heart_attack_pred.py file is located.
-Example:
-cd /d E:\strive_school\work\CHALLENGE\Chap2\Hipocratia
-
-2. Using python command, run the heart_attack_pred.py file followed
-csv file where the records are stored.
-Example:
-python heart_attack_pred.py device/example_measurements.csv
-
-
-NOTE: csv file must followed the same structure as `example_measurements.csv`.
-It's the same structure as `X_test`
-"""
-
-
 # Loading model
 model = joblib.load('model.joblib')
 
