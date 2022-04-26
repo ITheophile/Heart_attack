@@ -1,3 +1,9 @@
+# catboost files
+events.out.tfevents
+learn_error.tsv
+time_left.tsv
+*.tsv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
