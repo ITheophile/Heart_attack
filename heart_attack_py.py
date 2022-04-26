@@ -26,24 +26,7 @@ from sklearn.linear_model import LogisticRegression
 data = pd.read_csv(r'data\heart.csv') 
 # (data.corr()['output'].sort_values().plot.barh())
 (data.corr()['output'].abs().sort_values().plot.barh())
-# plt.show()
-# exng       -0.436757
-# oldpeak    -0.430696
-# caa        -0.391724
-# thall      -0.344029
-# sex        -0.280937
-# age        -0.225439
-# trtbps     -0.144931
-# chol       -0.085239
-# fbs        -0.028046
-# restecg     0.137230
-# slp         0.345877
-# thalachh    0.421741
-# cp          0.433798
-# output      1.000000
 
-
-# print(data.isnull().sum()) - no missing data
 
 # Build a data enhancer
 
