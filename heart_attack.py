@@ -8,8 +8,10 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import make_pipeline
+from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.metrics import accuracy_score, plot_confusion_matrix, classification_report
+from sklearn.model_selection import GridSearchCV
+
 
 # Algorithms
 from sklearn.ensemble      import RandomForestClassifier
@@ -22,12 +24,12 @@ from lightgbm              import LGBMClassifier
 from catboost              import CatBoostClassifier
 
 # Load and Prepro 
-
+np.random.seed(0)
 # Load data
 def load_and_cleaning(filepath):
     raw_data = pd.read_csv(filepath)
-    clean_data = raw_data.drop_duplicates()
-    return clean_data
+    # clean_data = raw_data.drop_duplicates()
+    return raw_data
 
 # print('Shape of data after dropping duplicate',data.shape)
 
@@ -50,9 +52,7 @@ def splitting_data(data):
 # Preprocessor
 
 def data_preprocessing(numerical_variables):
-    # num_var = ['age', 'trtbps', 'chol', 'thalachh', 'oldpeak']
-    
-
+    # num_var = ['age', 'trtbps', 'chol', 'thalachh', 'oldpeak'
 
     num_prep = ColumnTransformer([('num_prepo', StandardScaler(), numerical_variables)],
                                 remainder='passthrough')
@@ -115,7 +115,6 @@ def model_perfromance(classifiers,X_train,y_train,X_test,y_test):
 
 
 def generate_data(data):
-    np.random.seed(0)
     gen_data = data.copy()
     sep_on = 'sex'
     divide_std_by = 10
@@ -154,7 +153,7 @@ def generate_data(data):
  
 
 def augmented_data(generated_data,X_train,y_train):
-    np.random.seed(0)
+    
     gen = generated_data
     extra_data = gen.sample(gen.shape[0] // 5)
     X_train_aug = pd.concat([X_train, extra_data.drop(['output'], axis=1) ])
@@ -162,9 +161,26 @@ def augmented_data(generated_data,X_train,y_train):
     # print(f'Augmented X_train by {((len(X_train_aug) - len(X_train)) / len(X_train)) * 100 }%')
     return X_train_aug, y_train_aug
 
-   
+def gridsearch_extratrees(x_train,y_train):
+        clf_model = ExtraTreesClassifier(random_state=0)
+        parametes = {'max_depth': np.linspace(2, 7).astype(int),'max_features':['auto','sqrt','log2']}
+        grid_search = GridSearchCV(clf_model, parametes)
+        grid_search.fit(x_train,y_train)
+        tuned_model =grid_search.best_estimator_
+        # print(grid_search.best_score_)
+        # ExtraTreesClassifier(max_depth=6, random_state=0)
+        return    tuned_model
      
+def gridsearch_randomforest(x_train,y_train):
+        clf_model = RandomForestClassifier(random_state=0)
+        parametes = {'n_estimators': np.linspace(100, 1000, 10).astype(int),'max_depth': np.linspace(2, 7).astype(int)}
+        grid_search = GridSearchCV(clf_model, parametes)
+        grid_search.fit(x_train,y_train)
+        tuned_model =grid_search.best_estimator_
+        # print(grid_search.best_score_)
 
+        
+        return    tuned_model
   
 def final_model(classifier,model_name,X_train_aug, y_train_aug):
 
